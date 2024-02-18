@@ -22,24 +22,25 @@ const requireSignIn = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
     try {
         const user = await userModal.findById(req.user._id);
-        console.log(">>>", user.role !== 1,user.role)
+        console.log(">>>>>>>>>>>>>>>>>", user.role);
         if (user.role !== 1) {
             return res.status(401).send({
                 success: false,
-                message: "UnAuthorized Access"
+                message: "Unauthorized Access"
             });
-        }else{
+        } else {
             next();
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(401).send({
             success: false,
             error,
             message: "Error in admin middleware"
-        })
+        });
     }
-}
+};
+
 
 module.exports = {
     requireSignIn, isAdmin
