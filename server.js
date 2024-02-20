@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");  // Fix the typo here
 const connectDB = require("./config/db");
 const authRoute = require("./routes/authRoute");
+const categoryRoutes = require("./routes/categoryRoutes")
 const cors = require("cors")
 
 // Configure env
@@ -21,6 +22,7 @@ app.use(morgan("dev"));  // Fix the typo here
 
 // Routes
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/category", categoryRoutes)
 
 app.get("/", (req, resp) => {
     resp.send("<h1>Welcome to ecommerce app</h1>");
