@@ -1,5 +1,5 @@
 const { default: slugify } = require("slugify");
-const categotyModal = require("../models/categotyModal");
+const categoryModal = require("../models/categoryModal");
 
 const createCategoryController = async (req, res) => {
     try {
@@ -7,7 +7,7 @@ const createCategoryController = async (req, res) => {
         if (!name) {
             return res.status(401).send({ message: "Name is Required" });
         }
-        const existingCategory = await categotyModal.findOne({ name });
+        const existingCategory = await categoryModal.findOne({ name });
         if (existingCategory) {
             return res.status(200).send({
                 success: true,
@@ -36,14 +36,15 @@ const updateCategoryController = async (req, res) => {
     try {
         const { name } = req.body;
         const { id } = req.params;
-        const category = await categotyModal.findByIdAndUpdate(id, { name, slug: slugify(name) }, { new: true })
+        console.log(id, ">>>>>")
+        const category = await categoryModal.findByIdAndUpdate(id, { name, slug: slugify(name) }, { new: true })
         res.status(200).send({
             success: true,
             message: "Updated successfully",
             category
         })
     } catch (error) {
-        console.log(error);
+        console.log(error, "Hello");
         res.status(500).send({
             success: false,
             error,
@@ -52,7 +53,70 @@ const updateCategoryController = async (req, res) => {
     }
 }
 
+
+const categoryController = async (req, res) => {
+    try {
+        const category = await categoryModal.find({});
+        res.status(200).send({
+            success: true,
+            message: "Successfully fetched all category",
+            category
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            error,
+            message: "Error while fetching category"
+        })
+    }
+}
+
+const singleCategoryController = async (req, res) => {
+    try {
+        const category = await categoryModal.findOne({
+            slug: req.params.slug
+        })
+        res.status(200).send({
+            success: true,
+            message: "Get single category successfully",
+            category
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            error,
+            message: "Error while fetching single category"
+        })
+    }
+}
+
+const deleteCategoryController = async (req,res) => {
+    try {
+        const { id } = req.params;
+        console.log(id, ">>>>>")
+        const category = await categoryModal.findByIdAndDelete(id)
+        res.status(200).send({
+            success: true,
+            message: "deleted successfully",
+            category
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            error,
+            message: "Error while deleting category"
+        })
+    }
+}
+
 module.exports = {
     createCategoryController,
-    updateCategoryController
+    updateCategoryController,
+    categoryController,
+    singleCategoryController,
+    deleteCategoryController
 };
