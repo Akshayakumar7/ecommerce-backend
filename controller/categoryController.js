@@ -1,5 +1,5 @@
 const { default: slugify } = require("slugify");
-const categoryModal = require("../models/categoryModal");
+const categoryModal = require("../models/categoryModal")
 
 const createCategoryController = async (req, res) => {
     try {
@@ -14,7 +14,7 @@ const createCategoryController = async (req, res) => {
                 message: "Category Already Exist"
             })
         }
-        const category = await new categotyModal({ name, slug: slugify(name) }).save();
+        const category = await new categoryModal({ name, slug: slugify(name) }).save();
         res.status(201).send({
             success: true,
             message: "new category created",
@@ -36,7 +36,6 @@ const updateCategoryController = async (req, res) => {
     try {
         const { name } = req.body;
         const { id } = req.params;
-        console.log(id, ">>>>>")
         const category = await categoryModal.findByIdAndUpdate(id, { name, slug: slugify(name) }, { new: true })
         res.status(200).send({
             success: true,
@@ -44,7 +43,7 @@ const updateCategoryController = async (req, res) => {
             category
         })
     } catch (error) {
-        console.log(error, "Hello");
+        console.log(error);
         res.status(500).send({
             success: false,
             error,
@@ -93,10 +92,9 @@ const singleCategoryController = async (req, res) => {
     }
 }
 
-const deleteCategoryController = async (req,res) => {
+const deleteCategoryController = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id, ">>>>>")
         const category = await categoryModal.findByIdAndDelete(id)
         res.status(200).send({
             success: true,
